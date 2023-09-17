@@ -163,7 +163,7 @@ static int open_mapping_pshm(int cap)
 }
 #endif
 
-#ifdef HAVE_MEMFD_CREATE
+#if HAVE_DECL_MEMFD_CREATE
 static int do_open_mshm(void)
 {
   char *name;
@@ -320,7 +320,7 @@ struct mappingdrivers mappingdriver_shm = {
 };
 #endif
 
-#ifdef HAVE_MEMFD_CREATE
+#if HAVE_DECL_MEMFD_CREATE
 struct mappingdrivers mappingdriver_mshm = {
   "mapmshm",
   "memfd mapping",

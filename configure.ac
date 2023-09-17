@@ -79,7 +79,8 @@ if test -z "$XAS"; then
         XASFLAGS="$ASFLAGS --32"
       fi
     else
-      AC_MSG_ERROR([cross-assembler not found, please install binutils-i686-linux-gnu])
+      #clang and llvm should be enough
+      XASFLAGS="clang $ASFLAGS --target=i686-linux-gnu"
     fi
   else
     XASFLAGS="$ASFLAGS --32"
@@ -228,7 +229,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 
 AC_CHECK_LIB(rt, shm_open)
 dnl below defines HAVE_xxx so needed even if AC_CHECK_LIB() succeeded
-AC_CHECK_FUNCS([shm_open memfd_create fopencookie sigtimedwait closefrom])
+AC_CHECK_FUNCS([shm_open memfd_create fopencookie wordexp sigtimedwait closefrom])
 AC_CHECK_FUNCS([setxattr], [
     USE_XATTRS=1
     AC_SUBST(USE_XATTRS)
@@ -251,6 +252,8 @@ AC_CHECK_DECLS([F_OFD_SETLK], [
 AC_CHECK_DECLS([MREMAP_MAYMOVE],,, [[#include <sys/mman.h>]])
 AC_CHECK_DECLS([MADV_POPULATE_WRITE, MADV_DONTNEED, MADV_FREE],,,
   [[#include <sys/mman.h>]])
+#this require __USE_GNU and android 30+
+AC_CHECK_DECLS([memfd_create],,, [[#include <sys/mman.h>]])
 
 PKG_CHECK_MODULES([LIBBSD], [libbsd], [
     dnl re-check for proper arch (multilib)

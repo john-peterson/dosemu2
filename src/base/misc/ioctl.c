@@ -14,7 +14,10 @@
 #include <sys/wait.h>
 #include <limits.h>
 #include <assert.h>
-
+#ifdef __ANDROID__
+//https://github.com/tux-mind/libbthread
+#include <bthread.h>
+#endif
 #include <sys/socket.h>
 #include <sys/ioctl.h>
 #include "memory.h"
