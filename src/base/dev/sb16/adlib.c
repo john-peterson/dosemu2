@@ -38,6 +38,10 @@
 #include "dbadlib.h"
 #include <limits.h>
 #include <pthread.h>
+#ifdef __ANDROID__
+//https://github.com/tux-mind/libbthread
+#include <bthread.h>
+#endif
 #include <semaphore.h>
 
 #define ADLIB_BASE 0x388

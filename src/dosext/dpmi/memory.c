@@ -677,6 +677,7 @@ err0:
 
 int DPMI_freeShared(dpmi_pm_block_root *root, uint32_t handle)
 {
+#ifdef HAVE_SHM_OPEN
     void *exlock;
     int rc = 1;
     dpmi_pm_block *ptr = lookup_pm_block(root, handle);
@@ -697,11 +698,13 @@ int DPMI_freeShared(dpmi_pm_block_root *root, uint32_t handle)
     shlock_close(exlock);
 
     free_pm_block(root, ptr);
+#endif
     return 0;
 }
 
 int DPMI_freeShPartial(dpmi_pm_block_root *root, uint32_t handle)
 {
+#ifdef HAVE_SHM_OPEN
     void *exlock;
     int rc;
     dpmi_pm_block *ptr = lookup_pm_block(root, handle);
@@ -727,6 +730,7 @@ int DPMI_freeShPartial(dpmi_pm_block_root *root, uint32_t handle)
     } else {
         free_pm_block(root, ptr);
     }
+#endif
     return 0;
 }
 
