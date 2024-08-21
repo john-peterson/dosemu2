@@ -54,16 +54,19 @@ fi
 CONFIG_HOST=`uname -s`
 AC_SUBST(CONFIG_HOST)
 
-AC_PATH_PROG([AS], [as])
-if test -z "$AS"; then
-  AC_PATH_PROG([AS], [clang])
-  if test -z "$AS"; then
-    AC_MSG_ERROR(as not found)
-  fi
+AC_PATH_PROG([AS], [clang])
+if test -n "$AS"; then
   AC_MSG_NOTICE(Using clang as as...)
   clang_as_as=1
   ASFLAGS="-xassembler -c -"
+else
+#this will fail on arm it doesn't understand 386
+  AC_PATH_PROG([AS], [as])
+  if test -z "$AS"; then
+    AC_MSG_ERROR(as not found)
+  fi
 fi
+
 AC_PATH_PROGS([XAS], [i686-linux-gnu-as i386-elf-as])
 if test -z "$XAS"; then
   if test "$CONFIG_HOST" = "Darwin"; then
@@ -110,7 +113,8 @@ if test -z "$OBJCOPY"; then
   OBJCOPY="$LOBJCOPY"
 fi
 
-AC_PATH_PROGS([XOBJCOPY], [i686-linux-gnu-objcopy x86_64-linux-gnu-objcopy objcopy])
+#llvm-objcopy understand 386
+AC_PATH_PROGS([XOBJCOPY], [i686-linux-gnu-objcopy x86_64-linux-gnu-objcopy llvm-objcopy objcopy])
 if test -z "$XOBJCOPY"; then
   XOBJCOPY="$OBJCOPY"
 fi
