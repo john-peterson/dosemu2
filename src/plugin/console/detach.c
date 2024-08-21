@@ -2,7 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#ifdef __linux__
+#ifdef __ANDROID__
+#include <linux/vt.h>
+#include <linux/kd.h>
+#elif __linux__
 #include <sys/vt.h>
 #include <sys/kd.h>
 #endif
