@@ -566,7 +566,9 @@ static void move_dosemu_lib_dir(void)
     free(keymap_load_base_path);
   keymap_load_base_path = assemble_path(dosemu_lib_dir_path, "");
 
-  rp = assemble_path(RUNDIR_PREFIX, dosemu_uid);
+	char run[0xff];
+	sprintf(run,"%s/user", getenv("XDG_RUNTIME_DIR"));
+  rp = assemble_path(getenv("XDG_RUNTIME_DIR")?run:RUNDIR_PREFIX, dosemu_uid);
   dosemu_rundir_path = mkdir_under(rp, "dosemu2");
   free(rp);
   if (dosemu_rundir_path) {
