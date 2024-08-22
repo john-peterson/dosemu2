@@ -110,7 +110,7 @@ static int do_open_file(void)
   char tmp[] = "/tmp/dosemu2_mapfile_XXXXXX";
   int fd = mkstemp(tmp);
   if (fd == -1) {
-    perror("mkstemp()");
+    perror("mapfile mkstemp()");
     return -1;
   }
   unlink(tmp);

@@ -75,7 +75,7 @@ static int open_mlemu(int *r_fds)
     /* create 2 fds, 1 for mirroring locks and 1 for testing locks */
     fd0 = mkstemp(mltmpl);
     if (fd0 == -1) {
-      perror("mkstemp()");
+      perror("mfs/share mkstemp()");
       return -1;
     }
     fd1 = open(mltmpl, O_RDONLY | O_CLOEXEC);
