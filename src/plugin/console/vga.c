@@ -7,7 +7,12 @@
 #include <string.h>
 #include <semaphore.h>
 #include <pthread.h>
-#ifdef __linux__
+#ifdef __ANDROID__
+#include <bthread.h>
+#include <linux/kd.h>
+#include <linux/vt.h>
+#include <linux/ioctl.h>
+#elif __linux__
 #include <sys/kd.h>
 #include <sys/vt.h>
 #include <sys/ioctl.h>

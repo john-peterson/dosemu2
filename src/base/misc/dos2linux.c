@@ -129,7 +129,10 @@
 #include <alloca.h>
 #endif
 #include <semaphore.h>
-
+#ifdef __ANDROID__
+//https://github.com/tux-mind/libbthread
+#include <bthread.h>
+#endif
 #include "emu.h"
 #include "cpu-emu.h"
 #include "int.h"

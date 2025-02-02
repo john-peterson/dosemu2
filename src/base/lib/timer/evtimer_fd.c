@@ -40,6 +40,9 @@
 #endif
 #include "utilities.h"
 #include "evtimer.h"
+#ifdef __ANDROID__
+#include <bthread.h>
+#endif
 
 struct evtimer {
     int fd;

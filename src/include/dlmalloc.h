@@ -419,10 +419,11 @@ DEFAULT_MMAP_THRESHOLD       default: 256K
   system version and #define HAVE_USR_INCLUDE_MALLOC_H.
 */
 
-/* #define HAVE_USR_INCLUDE_MALLOC_H */
-
+#ifdef __ANDROID__
+#define HAVE_USR_INCLUDE_MALLOC_H
+#endif
 #ifdef HAVE_USR_INCLUDE_MALLOC_H
-#include "/usr/include/malloc.h"
+#include "malloc.h"
 #else /* HAVE_USR_INCLUDE_MALLOC_H */
 
 struct mallinfo {

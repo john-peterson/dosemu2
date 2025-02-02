@@ -44,6 +44,10 @@
 #include "chipset.h"
 #include "vint.h"
 #include "vtmr.h"
+#ifdef __BIONIC__
+//https://github.com/tux-mind/libbthread
+#include <bthread.h>
+#endif
 
 #define VTMR_FIRST_PORT 0x550
 #define VTMR_VPEND_PORT VTMR_FIRST_PORT

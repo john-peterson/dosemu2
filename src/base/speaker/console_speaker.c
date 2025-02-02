@@ -5,7 +5,9 @@
  */
 
 #include <sys/ioctl.h>
-#ifdef __linux__
+#ifdef __ANDROID__
+#include <linux/kd.h>
+#elif __linux__
 #include <sys/kd.h>
 #endif
 

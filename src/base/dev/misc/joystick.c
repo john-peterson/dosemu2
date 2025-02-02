@@ -76,7 +76,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#if __GLIBC__
 #define USE_PTHREADS 1
+#endif
 
 #ifdef USE_PTHREADS
 	#include <pthread.h>

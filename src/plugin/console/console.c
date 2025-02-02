@@ -3,7 +3,10 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <sys/ioctl.h>
-#ifdef __linux__
+#ifdef __ANDROID__
+#include <linux/kd.h>
+#include <linux/vt.h>
+#elif __linux__
 #include <sys/kd.h>
 #include <sys/vt.h>
 #endif

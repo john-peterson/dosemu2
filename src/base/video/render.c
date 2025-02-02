@@ -17,8 +17,10 @@
 #include "video.h"
 #include "render_priv.h"
 
+#if defined(__GLIBC__)
 #define RENDER_THREADED 1
 #define TEXT_THREADED 1
+#endif
 
 struct rmcalls_wrp {
   struct remap_calls *calls;
