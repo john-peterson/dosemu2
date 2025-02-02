@@ -54,16 +54,19 @@ fi
 CONFIG_HOST=`uname -s`
 AC_SUBST(CONFIG_HOST)
 
-AC_PATH_PROG([AS], [as])
-if test -z "$AS"; then
-  AC_PATH_PROG([AS], [clang])
-  if test -z "$AS"; then
-    AC_MSG_ERROR(as not found)
-  fi
+AC_PATH_PROG([AS], [clang])
+if test -n "$AS"; then
   AC_MSG_NOTICE(Using clang as as...)
   clang_as_as=1
   ASFLAGS="-xassembler -c -"
+else
+#this will fail on arm it doesn't understand 386
+  AC_PATH_PROG([AS], [as])
+  if test -z "$AS"; then
+    AC_MSG_ERROR(as not found)
+  fi
 fi
+
 AC_PATH_PROGS([XAS], [i686-linux-gnu-as i386-elf-as])
 if test -z "$XAS"; then
   if test "$CONFIG_HOST" = "Darwin"; then
@@ -79,7 +82,8 @@ if test -z "$XAS"; then
         XASFLAGS="$ASFLAGS --32"
       fi
     else
-      AC_MSG_ERROR([cross-assembler not found, please install binutils-i686-linux-gnu])
+      #clang and llvm should be enough
+      XASFLAGS="clang $ASFLAGS --target=i686-linux-gnu"
     fi
   else
     XASFLAGS="$ASFLAGS --32"
@@ -109,7 +113,8 @@ if test -z "$OBJCOPY"; then
   OBJCOPY="$LOBJCOPY"
 fi
 
-AC_PATH_PROGS([XOBJCOPY], [i686-linux-gnu-objcopy x86_64-linux-gnu-objcopy objcopy])
+#llvm-objcopy understand 386
+AC_PATH_PROGS([XOBJCOPY], [i686-linux-gnu-objcopy x86_64-linux-gnu-objcopy llvm-objcopy objcopy])
 if test -z "$XOBJCOPY"; then
   XOBJCOPY="$OBJCOPY"
 fi
@@ -228,7 +233,7 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([
 
 AC_CHECK_LIB(rt, shm_open)
 dnl below defines HAVE_xxx so needed even if AC_CHECK_LIB() succeeded
-AC_CHECK_FUNCS([shm_open memfd_create fopencookie sigtimedwait closefrom])
+AC_CHECK_FUNCS([shm_open memfd_create fopencookie wordexp sigtimedwait closefrom])
 AC_CHECK_FUNCS([setxattr], [
     USE_XATTRS=1
     AC_SUBST(USE_XATTRS)
@@ -251,6 +256,8 @@ AC_CHECK_DECLS([F_OFD_SETLK], [
 AC_CHECK_DECLS([MREMAP_MAYMOVE],,, [[#include <sys/mman.h>]])
 AC_CHECK_DECLS([MADV_POPULATE_WRITE, MADV_DONTNEED, MADV_FREE],,,
   [[#include <sys/mman.h>]])
+#this require __USE_GNU and android 30+
+AC_CHECK_DECLS([memfd_create],,, [[#include <sys/mman.h>]])
 
 PKG_CHECK_MODULES([LIBBSD], [libbsd], [
     dnl re-check for proper arch (multilib)
